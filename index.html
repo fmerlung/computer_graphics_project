@@ -1,17 +1,37 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Project 10</title>
-    </head>
-    <body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Texture layer viewer</title>
+    <style>
+        body { font-family: sans-serif; background: #222; color: #fff; }
+        .controls { margin-bottom: 15px; padding: 10px; background: #333; border-radius: 8px; }
+        button { cursor: pointer; padding: 5px 10px; margin-right: 5px; font-weight: bold;}
+        label { margin-right: 15px; cursor: pointer; }
+        canvas { display: block; margin: 0 auto; background: #000; }
+    </style>
+</head>
+<body>
+    <div class="controls">
         <div style="margin-bottom: 10px;">
-            <button id="btnChecker">Theme 1: Checkerboard</button>
-            <button id="btnStripes">Theme 2: Golden Stripes</button>
+            <strong>Texture Set: </strong>
+            <button id="btnSet1">Set 1: Bricks</button>
+            <button id="btnSet2">Set 2: Tree</button>
+            <button id="btnSet3">Set 3: Rocks</button>
         </div>
-        <canvas id="canvas" width="800" height="600">
-            Please use a browser that supports HTML5 canvas.
-        </canvas>
-        <script type="text/javascript" src="./utils.js"></script>
-        <script type="text/javascript" src="./webgpu.js"></script>
-    </body>
+        <div>
+            <strong>Layers: </strong>
+            <label><input type="checkbox" id="chkDiff" checked> Diffuse</label>
+            <label><input type="checkbox" id="chkDisp" checked> Displacement</label>
+            <label><input type="checkbox" id="chkNorm" checked> Normal</label>
+            <label><input type="checkbox" id="chkRough" checked> Roughness</label>
+            <label><input type="checkbox" id="chkAO" checked> Ambient Occlusion</label>
+        </div>
+    </div>
+
+    <canvas id="canvas" width="800" height="600"></canvas>
+    
+    <script src="./utils.js"></script> 
+    <script type="module" src="./webgpu.js"></script>
+</body>
 </html>

@@ -29,24 +29,25 @@ struct VertexOutput {
 fn vs_main(input : VertexInput) -> VertexOutput {
     var output : VertexOutput;
     
-    // 1. Read Displacement Map (LOD 0)
-    let dispColor = textureSampleLevel(dispTex, mySampler, input.uv, 0.0).r;
-    let displacementScale = 0.25; // Tweaking this value is part of your report!
+    // Add tiling for more details
+    let tiling = 2.0;
+    let scaledUV = input.uv * tiling;
+
+    let dispColor = textureSampleLevel(dispTex, mySampler, scaledUV, 0.0).r;
+    let displacementScale = 0.3;
     
-    // 2. Move vertex outward along normal
     let newPos = input.position + (input.normal * dispColor * displacementScale);
     
     output.vPosition = (uniforms.modelMatrix * vec4<f32>(newPos, 1.0)).xyz;
     output.Position = uniforms.modelViewProjectionMatrix * vec4<f32>(newPos, 1.0);
     output.vNormal = (uniforms.modelMatrix * vec4<f32>(input.normal, 0.0)).xyz;
-    output.vUv = input.uv;
+    output.vUv = scaledUV;
     
     return output;
 }
 
 @fragment
 fn fs_main(input : VertexOutput) -> @location(0) vec4<f32> {
-    // 1. Sample all textures
     let baseColor = textureSample(diffTex, mySampler, input.vUv).rgb;
     let normalMap = textureSample(normTex, mySampler, input.vUv).rgb;
     let roughness = textureSample(roughTex, mySampler, input.vUv).r;
@@ -60,7 +61,7 @@ fn fs_main(input : VertexOutput) -> @location(0) vec4<f32> {
     let finalNormal = normalize(input.vNormal + mapN * 0.5);
 
     // 3. Lighting (Blinn-Phong)
-    let lightPos = vec3<f32>(5.0, 5.0, 5.0);
+    let lightPos = vec3<f32>(5.0, 5.0, 7.0);
     let viewDir = normalize(uniforms.cameraPosition - input.vPosition);
     let lightDir = normalize(lightPos - input.vPosition);
     let halfDir = normalize(viewDir + lightDir);
